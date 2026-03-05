@@ -1,0 +1,17 @@
+{
+    'name': 'Patch: HOOT Test Normalization',
+    'version': '19.0.1.0.0',
+    'category': 'Hidden/Tests',
+    'summary': 'Patches specific JS tests that are failing due to environment-dependent OS rendering differences (padding-inline-start)',
+    'author': 'Gregory Mariani',
+    'website': '',
+    'license': 'LGPL-3',
+    'depends': ['html_editor'],
+    'assets': {
+        'web.tests_assets': [
+            'pe_patch_hoot_tests/static/tests/list_patch.test.js',
+        ],
+    },
+    'installable': True,
+    'auto_install': False,
+}
