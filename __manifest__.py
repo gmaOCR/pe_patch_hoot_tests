@@ -9,7 +9,7 @@
     'depends': ['html_editor'],
     'assets': {
         'web.tests_assets': [
-            'pe_patch_hoot_tests/static/tests/list_patch.test.js',
+            'pe_patch_hoot_tests/static/src/tests/list_patch.test.js',
         ],
     },
     'installable': True,
