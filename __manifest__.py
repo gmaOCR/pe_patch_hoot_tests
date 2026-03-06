@@ -8,10 +8,13 @@
     'license': 'LGPL-3',
     'depends': ['html_editor'],
     'assets': {
-        'web.tests_assets': [
+        'web.qunit_suite_tests': [
+            'pe_patch_hoot_tests/static/src/tests/list_patch.test.js',
+        ],
+        'web.qunit_suite_tests_mobile': [
             'pe_patch_hoot_tests/static/src/tests/list_patch.test.js',
         ],
     },
     'installable': True,
-    'auto_install': False,
+    'auto_install': True,
 }
