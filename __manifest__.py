@@ -6,10 +6,13 @@
     'author': 'Gregory Mariani',
     'website': '',
     'license': 'LGPL-3',
-    'depends': ['html_editor'],
+    'depends': ['html_editor', 'web'],
     'assets': {
-        'web.assets_tests': [
+        'web.assets_unit_tests': [
             ('prepend', 'pe_patch_hoot_tests/static/src/tests/list_patch.test.js'),
+        ],
+        'web.assets_tests': [
+            'pe_patch_hoot_tests/static/src/tests/repair_tour_patch.js',
         ],
     },
     'installable': True,

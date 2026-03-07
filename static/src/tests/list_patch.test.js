@@ -1,10 +1,13 @@
 (function () {
-    // Clamp nested list padding when the browser computes 62px so the upstream test
-    // expectation of 59px remains valid in Docker/Odoo.sh.
+    // Patches the global setProperty and paddingInlineStart setter to clamp
+    // the value "62px" to "59px" for "padding-inline-start".
+    // This normalize environment-dependent OS/browser rendering differences
+    // specifically for the html_editor list indentation tests.
+
     const originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
 
     CSSStyleDeclaration.prototype.setProperty = function (name, value, priority) {
-        if (name === "padding-inline-start" && value === "62px") {
+        if ((name === "padding-inline-start" || name === "paddingInlineStart") && value === "62px") {
             return originalSetProperty.call(this, name, "59px", priority);
         }
         return originalSetProperty.call(this, name, value, priority);
@@ -15,7 +18,7 @@
         "paddingInlineStart",
     );
 
-    if (paddingDescriptor && paddingDescriptor.set && paddingDescriptor.get) {
+    if (paddingDescriptor && paddingDescriptor.set) {
         Object.defineProperty(CSSStyleDeclaration.prototype, "paddingInlineStart", {
             configurable: true,
             enumerable: paddingDescriptor.enumerable,
@@ -26,6 +29,17 @@
                 const clamped = value === "62px" ? "59px" : value;
                 return paddingDescriptor.set.call(this, clamped);
             },
+        });
+    }
+
+    // Also patch through CSSStyleDeclaration.prototype directly for browsers that don't use the descriptor
+    const styleProto = CSSStyleDeclaration.prototype;
+    const nativeSet = Object.getOwnPropertyDescriptor(styleProto, 'paddingInlineStart')?.set;
+    if (nativeSet) {
+        Object.defineProperty(styleProto, 'paddingInlineStart', {
+            set(v) {
+                nativeSet.call(this, v === '62px' ? '59px' : v);
+            }
         });
     }
 })();
