@@ -11,9 +11,10 @@ if (repairTour) {
         const steps = originalSteps();
         const partnerStepIndex = steps.findIndex(s => s.trigger === ".ui-menu-item > a:contains('A Partner')");
         if (partnerStepIndex !== -1) {
-            // Replace with a more generic selector that also matches if already formatted or different structure
-            // Or just use the input and press enter if we can't find the menu item easily
-            steps[partnerStepIndex].trigger = ".ui-menu-item:has(a:contains('A Partner')), .ui-menu-item a:contains('A Partner')";
+            // In Odoo 19 (OWL), the autocomplete dropdown structure is different.
+            // We'll use a more robust way to select by typing and picking the first result,
+            // or targeting the OWL autocomplete item.
+            steps[partnerStepIndex].trigger = ".o-autocomplete--dropdown-item:contains('A Partner'), .ui-menu-item a:contains('A Partner'), .ui-menu-item:has(a:contains('A Partner'))";
         }
         return steps;
     };
