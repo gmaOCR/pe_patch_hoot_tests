@@ -7,8 +7,18 @@
     const originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
 
     CSSStyleDeclaration.prototype.setProperty = function (name, value, priority) {
-        if ((name === "padding-inline-start" || name === "paddingInlineStart") && value === "62px") {
-            return originalSetProperty.call(this, name, "59px", priority);
+        // Only attempt to normalize if we are not in a read-only context (computed styles)
+        // Computed styles usually don't have a parentRule or are marked as read-only in some engines
+        try {
+            if ((name === "padding-inline-start" || name === "paddingInlineStart") && value === "62px") {
+                return originalSetProperty.call(this, name, "59px", priority);
+            }
+        } catch (e) {
+            // If it's read-only (computed style), just ignore the set attempt
+            if (e instanceof TypeError && e.message.includes('read-only')) {
+                return;
+            }
+            throw e;
         }
         return originalSetProperty.call(this, name, value, priority);
     };
@@ -26,8 +36,15 @@
                 return paddingDescriptor.get.call(this);
             },
             set(value) {
-                const clamped = value === "62px" ? "59px" : value;
-                return paddingDescriptor.set.call(this, clamped);
+                try {
+                    const clamped = value === "62px" ? "59px" : value;
+                    return paddingDescriptor.set.call(this, clamped);
+                } catch (e) {
+                    if (e instanceof TypeError && e.message.includes('read-only')) {
+                        return;
+                    }
+                    throw e;
+                }
             },
         });
     }
