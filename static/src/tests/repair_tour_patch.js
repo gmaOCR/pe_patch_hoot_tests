@@ -14,7 +14,7 @@ if (repairTour) {
             // In Odoo 19 (OWL), the autocomplete dropdown structure is different.
             // We'll use a more robust way to select by typing and picking the first result,
             // or targeting the OWL autocomplete item.
-            steps[partnerStepIndex].trigger = ".o-autocomplete--dropdown-item:contains('A Partner'), .ui-menu-item a:contains('A Partner'), .ui-menu-item:has(a:contains('A Partner'))";
+            steps[partnerStepIndex].trigger = ".o-autocomplete--dropdown-item:contains('A Partner'), .o-autocomplete--dropdown-item:contains('A Partner') > a, .ui-menu-item a:contains('A Partner'), .ui-menu-item:has(a:contains('A Partner')), .o-autocomplete--dropdown-item:first";
         }
         return steps;
     };
